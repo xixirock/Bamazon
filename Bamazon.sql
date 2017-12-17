@@ -46,4 +46,5 @@ VALUES ("Audio Technica ATH-AD700X", "Headphones", 199.95 ,50),
 ("Panasonic RP-HJE120-PPK", "Earphone", 15.00 ,12),
 ("bluetooth headphones accessory stereo cable BT004", "Accessories", 7.99 ,37),
 ("Genuine Replacement Ear Pads", "Accessories", 13.99 ,91),
-("Wooden Omega Headphones Stand", "Accessories", 32.51 ,56),
+("Wooden Omega Headphones Stand", "Accessories", 32.51 ,56)
+
