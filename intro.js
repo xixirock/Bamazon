@@ -15,28 +15,35 @@ var supervisor = require("./supervisor");
 
 //Options for user intro interface 
 
-var option = ['Customer', 'Manager', 'Supervisor', 'Nope, see ya.'];
+var options = ['Customer', 'Manager', 'Supervisor', 'Nope, see ya.'];
+
+function quit() {
+	console.log("\n-------------------------------------------------\n");
+	console.log("Thanks for visiting Bamazon. See you next time.");
+	console.log("\n-------------------------------------------------\n");
+	process.exit();
+};
 
 function intro() {
     console.log('\n--------------------------------------------\n');
-    console.log('Welcome to Bamazon, your portal to the best headphones of the world!\n Have fun Shopping!')
+    console.log('Welcome to Bamazon, your portal to the best headphones of the world!\nHave fun Shopping!')
     console.log('\n--------------------------------------------\n');
     inquirer.prompt([
         {
-            type:'list',
-            choice: options,
+            type: 'list',
+            choices: ['Customer', 'Manager', 'Supervisor', 'Nope, see ya.'],
             message: 'You are our:\n',
             name: 'login'
         }
-    ]),then(function(res){
-        if(res.login = options[0]){
+    ]).then(function(res){
+        if(res.login === 'Customer'){
             customer();
-        }else if (res.login = options[1]){
+        }else if (res.login === 'Manager'){
             manager();
-        }else if (res.login = options[2]){
+        }else if (res.login === 'Supervisor'){
             supervisor();
-        }else if (res.login = options[3]){
-            return;
+        }else if (res.login === 'Nope, see ya.') {
+            quit();
         };
     });
     
