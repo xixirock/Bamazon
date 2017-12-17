@@ -1,0 +1,23 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "customer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xixirock/Bamazon.git"
+  },
+  "author": "Jason",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xixirock/Bamazon/issues"
+  },
+  "homepage": "https://github.com/xixirock/Bamazon#readme",
+  "dependencies": {
+    "easy-table": "^1.1.0",
+    "inquirer": "^4.0.1"
+  }
+}
