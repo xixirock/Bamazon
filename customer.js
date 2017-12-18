@@ -15,7 +15,7 @@ var connection = mysql.createConnection({
     host: "localhost",
     port: 3000,
     user: "root",
-    password: "",
+    password: "root",
     database: "Bamazon"
 });
 
@@ -54,7 +54,7 @@ var customer = function(){
 function view() {
     inquirer.prompt([
         {
-            type: 'list';
+            type: 'list',
             message: '\nSort By: ',
             // option for sorting by methods
             choices: ['Department', 'Price (ascending)', 'Price (descending)'],
@@ -113,3 +113,92 @@ function view() {
     });
 };
 
+// Ensure that the user is supplying only positive integers for their inputs
+function validateInput(value) {
+	var integer = Number.isInteger(parseFloat(value));
+	var sign = Math.sign(value);
+
+	if (integer && (sign === 1)) {
+		return true;
+	} else {
+		return 'Please enter a whole non-zero number.';
+	}
+}
+
+function order(){
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: item_id,
+            message: 'Please enter the Item ID that you would like to order!',
+            validate: validateInput,
+            filter: number
+        },
+        {
+            type: 'input',
+            name: item_id,
+            message: 'Please enter the Item ID that you would like to order!',
+            validate: validateInput,
+            filter: number
+        }
+    ]).then(function(input){
+        var item = input.item_id;
+        var quantity = input.quantity;
+
+        var queryStr = "SELECT * FROM products WHERE ?";
+
+        connection.query(queryStr, {item_id:item}, function(err, data){
+            if(err) throw err;
+
+            // If user insert number that are not a positive integer
+            // data empty, reselect id
+
+            if (data.length === 0){
+                console.log('ERROR: Invalid Item ID, Please select a valid ID.')
+                view();
+            }else{
+                var productData = data[0];
+
+                //if quantity request by the user are in stock
+
+                if (quantity <= productData.stock_quantity){
+                    console.log("The " + productData.product_name + " still has " + productData.stock_quantity + " available.\nHow many would you like to order?");
+
+                    var updateQuery = 'UPDATE products SET stock_quantity = ' + (productData.stock_quantity - quantity) + ' WHERE item_id = ' + item;
+
+                    connection.query(updateQuery, function(err, data){
+                        if(err) throw err;
+
+                        console.log('Your oder has been placed! Your total is $' + productData.price * quantity);
+						console.log('Thank you for shopping with us!');
+                        console.log("\n---------------------------------------------------------------------\n");
+                        
+                        inquirer.prompt([
+                            {
+                                type: 'list',
+                                message: 'Would you like to continue shopping on Bamazon?',
+                                choices: ['Yes', 'No'],
+                                name: 'continue'
+                            }
+                        ]).then(function(res){
+                            if (res.continue === 'Yes'){
+                                customer();
+                            }else {
+                                connection.end();
+                            };
+                        });
+                    });
+                }else {
+                    console.log('Sorry, there is not enough product in stock, your order can not be placed as is.');
+					console.log('Please modify your order.');
+					console.log("\n---------------------------------------------------------------------\n");
+
+					view();
+                };
+
+            };
+        });
+    });
+};
+
+customer();
